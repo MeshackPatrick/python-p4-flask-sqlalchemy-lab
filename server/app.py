@@ -13,21 +13,59 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
+
 @app.route('/')
 def home():
     return '<h1>Zoo app</h1>'
 
+
 @app.route('/animal/<int:id>')
 def animal_by_id(id):
-    return ''
+    animal = Animal.query.get_or_404(id)
+    response_body = f'<h1>Animal Information</h1>'
+    response_body += f'<ul>'
+    response_body += f'<li>Name: {animal.name}</li>'
+    response_body += f'<li>Species: {animal.species}</li>'
+    response_body += f'<li>Zookeeper: {animal.zookeeper.name}</li>'
+    response_body += f'<li>Enclosure: {animal.enclosure.environment}</li>'
+    response_body += f'</ul>'
+    return make_response(response_body, 200)
+
 
 @app.route('/zookeeper/<int:id>')
 def zookeeper_by_id(id):
-    return ''
+    zookeeper = Zookeeper.query.get_or_404(id)
+    response_body = f'<h1>Zookeeper Information</h1>'
+    response_body += f'<ul>'
+    response_body += f'<li>Name: {zookeeper.name}</li>'
+    response_body += f'<li>Birthday: {zookeeper.birthday}</li>'
+    response_body += f'<li>Animals Taken Care Of:'
+    for animal in zookeeper.animals:
+        response_body += f'<ul>'
+        response_body += f'<li>Name: {animal.name}</li>'
+        response_body += f'<li>Species: {animal.species}</li>'
+        response_body += f'</ul>'
+    response_body += f'</li>'
+    response_body += f'</ul>'
+    return make_response(response_body, 200)
+
 
 @app.route('/enclosure/<int:id>')
 def enclosure_by_id(id):
-    return ''
+    enclosure = Enclosure.query.get_or_404(id)
+    response_body = f'<h1>Enclosure Information</h1>'
+    response_body += f'<ul>'
+    response_body += f'<li>Environment: {enclosure.environment}</li>'
+    response_body += f'<li>Open to Visitors: {enclosure.open_to_visitors}</li>'
+    response_body += f'<li>Animals in the Enclosure:'
+    for animal in enclosure.animals:
+        response_body += f'<ul>'
+        response_body += f'<li>Name: {animal.name}</li>'
+        response_body += f'<li>Species: {animal.species}</li>'
+        response_body += f'</ul>'
+    response_body += f'</li>'
+    response_body += f'</ul>'
+    return make_response(response_body, 200)
 
 
 if __name__ == '__main__':
