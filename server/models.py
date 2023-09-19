@@ -30,4 +30,3 @@ class Animal(db.Model):
     zookeeper_id = db.Column(db.Integer, db.ForeignKey('zookeepers.id'), nullable=False)
     enclosure_id = db.Column(db.Integer, db.ForeignKey('enclosures.id'), nullable=False)
     animal_enclosure = db.relationship('Enclosure', backref='animal_enclosure')
-

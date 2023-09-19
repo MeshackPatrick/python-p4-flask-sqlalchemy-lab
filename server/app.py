@@ -24,6 +24,7 @@ def animal_by_id(id):
     animal = Animal.query.get_or_404(id)
     response_body = f'<h1>Animal Information</h1>'
     response_body += f'<ul>'
+    response_body += f'<li>ID: {animal.id}</li>'
     response_body += f'<li>Name: {animal.name}</li>'
     response_body += f'<li>Species: {animal.species}</li>'
     response_body += f'<li>Zookeeper: {animal.zookeeper.name}</li>'
@@ -37,13 +38,12 @@ def zookeeper_by_id(id):
     zookeeper = Zookeeper.query.get_or_404(id)
     response_body = f'<h1>Zookeeper Information</h1>'
     response_body += f'<ul>'
+    response_body += f'<li>ID: {zookeeper.id}</li>'
     response_body += f'<li>Name: {zookeeper.name}</li>'
     response_body += f'<li>Birthday: {zookeeper.birthday}</li>'
-    response_body += f'<li>Animals Taken Care Of:'
     for animal in zookeeper.animals:
         response_body += f'<ul>'
         response_body += f'<li>Name: {animal.name}</li>'
-        response_body += f'<li>Species: {animal.species}</li>'
         response_body += f'</ul>'
     response_body += f'</li>'
     response_body += f'</ul>'
@@ -53,18 +53,23 @@ def zookeeper_by_id(id):
 @app.route('/enclosure/<int:id>')
 def enclosure_by_id(id):
     enclosure = Enclosure.query.get_or_404(id)
-    response_body = f'<h1>Enclosure Information</h1>'
-    response_body += f'<ul>'
-    response_body += f'<li>Environment: {enclosure.environment}</li>'
-    response_body += f'<li>Open to Visitors: {enclosure.open_to_visitors}</li>'
-    response_body += f'<li>Animals in the Enclosure:'
+    response_body = f'''
+        <h1>Enclosure Information</h1>
+        <ul>
+             <li>Environment: {enclosure.environment}</li>
+             <li>Open to Visitors: {enclosure.open_to_visitors}</li> 
+        </ul>
+    '''
     for animal in enclosure.animals:
-        response_body += f'<ul>'
-        response_body += f'<li>Name: {animal.name}</li>'
-        response_body += f'<li>Species: {animal.species}</li>'
-        response_body += f'</ul>'
-    response_body += f'</li>'
-    response_body += f'</ul>'
+        response_body += f'''
+            <li>Name: {animal.name}</li>
+        '''
+
+    response_body += '''
+            </ul>
+    </ul>
+    '''
+
     return make_response(response_body, 200)
 
 
